@@ -105,6 +105,12 @@ describe('docker command', function() {
 			expect(command.host).equal('192.168.0.1');
 		});
 
+		it('should allow set user', function() {
+			var command = new Command({});
+			command.setParams({user: 'foo'});
+			expect(command.user).equal('foo');
+		});
+
 		it('should not allow set arbitrary option', function() {
 			var command = new Command({});
 			command.setParams({someOption: '123'});
@@ -181,6 +187,16 @@ describe('docker command', function() {
 			var params = runSpy.getCall(0).args[0];
 			expect(params.args[0]).equal('--host');
 			expect(params.args[1]).equal('192.168.0.1');
+		});
+
+		it('should optionally add user to command', function() {
+			var command = new Command({});
+			command.user = 'foo';
+			command.run({cmd: 'beep', args: ['1', '2']});
+
+			var params = runSpy.getCall(0).args[0];
+			expect(params.args[1]).equal('--user');
+			expect(params.args[2]).equal('foo');
 		});
 
 		it('should work in general', function() {
