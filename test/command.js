@@ -189,14 +189,33 @@ describe('docker command', function() {
 			expect(params.args[1]).equal('192.168.0.1');
 		});
 
-		it('should optionally add user to command', function() {
+		it('should optionally add user to run command', function() {
+			var command = new Command({});
+			command.user = 'foo';
+			command.run({cmd: 'run', args: ['1', '2']});
+
+			var params = runSpy.getCall(0).args[0];
+			expect(params.args[1]).equal('--user');
+			expect(params.args[2]).equal('foo');
+		});
+
+		it('should optionally add user to exec command', function() {
+			var command = new Command({});
+			command.user = 'foo';
+			command.run({cmd: 'run', args: ['1', '2']});
+
+			var params = runSpy.getCall(0).args[0];
+			expect(params.args[1]).equal('--user');
+			expect(params.args[2]).equal('foo');
+		});
+
+		it('should not add user to oher command', function() {
 			var command = new Command({});
 			command.user = 'foo';
 			command.run({cmd: 'beep', args: ['1', '2']});
 
 			var params = runSpy.getCall(0).args[0];
-			expect(params.args[1]).equal('--user');
-			expect(params.args[2]).equal('foo');
+			expect(params.args).eql(['beep', '1', '2']);
 		});
 
 		it('should work in general', function() {
