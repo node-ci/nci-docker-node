@@ -111,6 +111,18 @@ describe('docker command', function() {
 			expect(command.user).equal('foo');
 		});
 
+		it('should allow set publish option', function() {
+			var command = new Command({});
+			command.setParams({publish: ['8080:8080']});
+			expect(command.publish).eql(['8080:8080']);
+		});
+
+		it('should allow set publish all option', function() {
+			var command = new Command({});
+			command.setParams({publishAll: true});
+			expect(command.publishAll).equal(true);
+		});
+
 		it('should not allow set arbitrary option', function() {
 			var command = new Command({});
 			command.setParams({someOption: '123'});
@@ -212,6 +224,55 @@ describe('docker command', function() {
 		it('should not add user to oher command', function() {
 			var command = new Command({});
 			command.user = 'foo';
+			command.run({cmd: 'beep', args: ['1', '2']});
+
+			var params = runSpy.getCall(0).args[0];
+			expect(params.args).eql(['beep', '1', '2']);
+		});
+
+		it('should optionally add single publish option to run command', function() {
+			var command = new Command({});
+			command.publish = ['8080:8080'];
+			command.run({cmd: 'run', args: ['1', '2']});
+
+			var params = runSpy.getCall(0).args[0];
+			expect(params.args[1]).equal('--publish');
+			expect(params.args[2]).equal('8080:8080');
+		});
+
+		it('should optionally add multi publish options to run command', function() {
+			var command = new Command({});
+			command.publish = ['8080:8080', '9090:9999'];
+			command.run({cmd: 'run', args: ['1', '2']});
+
+			var params = runSpy.getCall(0).args[0];
+			expect(params.args[1]).equal('--publish');
+			expect(params.args[2]).equal('8080:8080');
+			expect(params.args[3]).equal('--publish');
+			expect(params.args[4]).equal('9090:9999');
+		});
+
+		it('should not add publish option to oher command', function() {
+			var command = new Command({});
+			command.publish = ['8080:8080'];
+			command.run({cmd: 'beep', args: ['1', '2']});
+
+			var params = runSpy.getCall(0).args[0];
+			expect(params.args).eql(['beep', '1', '2']);
+		});
+
+		it('should optionally add publish all option to run command', function() {
+			var command = new Command({});
+			command.publishAll = true;
+			command.run({cmd: 'run', args: ['1', '2']});
+
+			var params = runSpy.getCall(0).args[0];
+			expect(params.args[1]).equal('--publish-all');
+		});
+
+		it('should not add publish all option to oher command', function() {
+			var command = new Command({});
+			command.publishAll = true;
 			command.run({cmd: 'beep', args: ['1', '2']});
 
 			var params = runSpy.getCall(0).args[0];
