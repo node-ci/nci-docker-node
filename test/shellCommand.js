@@ -94,6 +94,16 @@ describe('docker shell command', function() {
 			var command = new Command({shellCmdArg: '-m'});
 			expect(command.shellCmdArg).equal('-m');
 		});
+
+		it('should set shell extra args by default to empty array', function() {
+			var command = new Command({});
+			expect(command.shellExtraArgs).eql([]);
+		});
+
+		it('should allow set another shell extra args', function() {
+			var command = new Command({shellExtraArgs: ['-i', '-l']});
+			expect(command.shellExtraArgs).eql(['-i', '-l']);
+		});
 	});
 
 	describe('set params', function() {
@@ -198,6 +208,16 @@ describe('docker shell command', function() {
 			var params = runSpy.getCall(0).args[0],
 				cmd = _(params.args).rest().join(' ');
 			expect(cmd).eql('/bin/sh -c beep "1" "2"');
+		});
+
+		it('should run remote command in a shell with shell extra args', function() {
+			var command = new Command({});
+			command.shellExtraArgs = ['-i', '-l'];
+			command.run({cmd: 'beep', args: ['1', '2']});
+
+			var params = runSpy.getCall(0).args[0],
+				cmd = _(params.args).rest().join(' ');
+			expect(cmd).eql('/bin/sh -i -l -c beep "1" "2"');
 		});
 
 		it('should pass options cwd as cd to command', function() {
