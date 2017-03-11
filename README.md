@@ -49,11 +49,11 @@ nodes:
           - !!js/regexp .*
       options:
           host: unix:///var/run/docker.sock
-          defaultEnv: nodejs:4
+          defaultEnv: node:4
 ```
 
 After that `localDocker` node will be used for building projects
 according to `usageStrategy`. During build nci will send commands
-(using docker client) to docker instance at `options.host`. "nodejs:4" image
+(using docker client) to docker instance at `options.host`. "node:4" image
 will be used by default, any other image (```envs``` allows any) name
 can be passed from project (project can specify target ```envs```).
