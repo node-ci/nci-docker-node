@@ -250,15 +250,6 @@ describe('docker shell command', function() {
 			expect(cmd).contain('beep "1\\"2" "3"');
 		});
 
-		it('should escape single quotes inside cmd', function() {
-			var command = new Command({});
-			command.run({cmd: 'beep "1\'2"'});
-
-			var params = runSpy.getCall(0).args[0],
-				cmd = params.args[params.args.length - 1];
-			expect(cmd).contain('beep "1\'\'2"');
-		});
-
 		it('should remove line breaks from cmd', function() {
 			var command = new Command({});
 			command.run({cmd: 'beep \n boop'});
