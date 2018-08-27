@@ -105,6 +105,36 @@ describe('docker command', function() {
 			expect(command.host).equal('192.168.0.1');
 		});
 
+		it('should allow set tls option', function() {
+			var command = new Command({});
+			command.setParams({tls: true});
+			expect(command.tls).equal(true);
+		});
+
+		it('should allow set tls verify option', function() {
+			var command = new Command({});
+			command.setParams({tlsVerify: true});
+			expect(command.tlsVerify).equal(true);
+		});
+
+		it('should allow set tls ca cert', function() {
+			var command = new Command({});
+			command.setParams({tlsCaCert: 'ca.pem'});
+			expect(command.tlsCaCert).equal('ca.pem');
+		});
+
+		it('should allow set tls cert', function() {
+			var command = new Command({});
+			command.setParams({tlsCert: 'cert.pem'});
+			expect(command.tlsCert).equal('cert.pem');
+		});
+
+		it('should allow set tls key', function() {
+			var command = new Command({});
+			command.setParams({tlsKey: 'key.pem'});
+			expect(command.tlsKey).equal('key.pem');
+		});
+
 		it('should allow set user', function() {
 			var command = new Command({});
 			command.setParams({user: 'foo'});
@@ -199,6 +229,54 @@ describe('docker command', function() {
 			var params = runSpy.getCall(0).args[0];
 			expect(params.args[0]).equal('--host');
 			expect(params.args[1]).equal('192.168.0.1');
+		});
+
+		it('should optionally add tls option to command', function() {
+			var command = new Command({});
+			command.tls = true;
+			command.run({cmd: 'beep', args: ['1', '2']});
+
+			var params = runSpy.getCall(0).args[0];
+			expect(params.args[0]).equal('--tls');
+		});
+
+		it('should optionally add tls verify option to command', function() {
+			var command = new Command({});
+			command.tlsVerify = true;
+			command.run({cmd: 'beep', args: ['1', '2']});
+
+			var params = runSpy.getCall(0).args[0];
+			expect(params.args[0]).equal('--tlsverify');
+		});
+
+		it('should optionally add tls ca cert to command', function() {
+			var command = new Command({});
+			command.tlsCaCert = 'ca.pem';
+			command.run({cmd: 'beep', args: ['1', '2']});
+
+			var params = runSpy.getCall(0).args[0];
+			expect(params.args[0]).equal('--tlscacert');
+			expect(params.args[1]).equal('ca.pem');
+		});
+
+		it('should optionally add tls cert to command', function() {
+			var command = new Command({});
+			command.tlsCert = 'cert.pem';
+			command.run({cmd: 'beep', args: ['1', '2']});
+
+			var params = runSpy.getCall(0).args[0];
+			expect(params.args[0]).equal('--tlscert');
+			expect(params.args[1]).equal('cert.pem');
+		});
+
+		it('should optionally add tls key to command', function() {
+			var command = new Command({});
+			command.tlsKey = 'key.pem';
+			command.run({cmd: 'beep', args: ['1', '2']});
+
+			var params = runSpy.getCall(0).args[0];
+			expect(params.args[0]).equal('--tlskey');
+			expect(params.args[1]).equal('key.pem');
 		});
 
 		it('should optionally add user to run command', function() {
