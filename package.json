@@ -1,6 +1,6 @@
 {
   "name": "nci-docker-node",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "description": "Docker node for nci",
   "main": "lib/index.js",
   "scripts": {
