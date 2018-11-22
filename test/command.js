@@ -375,11 +375,11 @@ describe('docker command', function() {
 		it('should optionally add shmSize option to command', function() {
 			var command = new Command({});
 			command.shmSize = '128m';
-			command.run({cmd: 'beep', args: ['1', '2']});
+			command.run({cmd: 'run', args: ['1', '2']});
 
 			var params = runSpy.getCall(0).args[0];
-			expect(params.args[0]).equal('--shm-size');
-			expect(params.args[1]).equal('128m');
+			expect(params.args[1]).equal('--shm-size');
+			expect(params.args[2]).equal('128m');
 		});
 
 	});
