@@ -158,6 +158,12 @@ describe('docker command', function() {
 			command.setParams({someOption: '123'});
 			expect(command).not.have.key('someOption');
 		});
+
+		it('should allow set shmSize option', function() {
+			var command = new Command({});
+			command.setParams({shmSize: true});
+			expect(command.shmSize).equal(true);
+		});
 	});
 
 	describe('run method', function() {
@@ -364,6 +370,16 @@ describe('docker command', function() {
 			var params = runSpy.getCall(0).args[0];
 			expect(params.cmd).equal('docker');
 			expect(params.args).eql(['run', 'ubuntu']);
+		});
+
+		it('should optionally add shmSize option to command', function() {
+			var command = new Command({});
+			command.shmSize = '128m';
+			command.run({cmd: 'beep', args: ['1', '2']});
+
+			var params = runSpy.getCall(0).args[0];
+			expect(params.args[0]).equal('--shm-size');
+			expect(params.args[1]).equal('128m');
 		});
 
 	});
