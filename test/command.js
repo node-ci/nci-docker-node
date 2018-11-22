@@ -161,8 +161,8 @@ describe('docker command', function() {
 
 		it('should allow set shmSize option', function() {
 			var command = new Command({});
-			command.setParams({shmSize: true});
-			expect(command.shmSize).equal(true);
+			command.setParams({shmSize: '128m'});
+			expect(command.shmSize).equal('128m');
 		});
 	});
 
